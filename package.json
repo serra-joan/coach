@@ -1,6 +1,6 @@
 {
   "name": "coach-cli",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Coach es una herramienta de línea de comandos para analizar archivos de actividades deportivas, de Garmin, en formato TCX y obtener resúmenes, análisis y recomendaciones utilizando inteligencia artificial.",
   "main": "./src/cli/index.js",
   "type": "module",
@@ -14,6 +14,10 @@
   "dependencies": {
     "picocolors": "1.1.1",
     "xml2js": "0.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serra-joan/coach.git"
   },
   "bin": {
     "coach": "./src/cli/index.js"
