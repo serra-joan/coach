@@ -4,7 +4,7 @@
 
 import prompts from '../prompts/prompts.json' with { type: 'json' };
 
-const MODEL_API = 'llama3.2:1b';
+const MODEL_API = 'lfm2.5-thinking:latest';
 const URL_API = 'http://localhost:11434/';
 const HEADERS_API = {
     'Content-Type': 'application/json',

@@ -30,16 +30,17 @@ async function opinion({model, fileName}) {
 
 function help() {
     console.log(`
-        Uso: coach <archivo.tcx> [modelo]
+        Uso: coach <comando> <archivo.tcx> [modelo]
         El parámetro modelo es opcional. Si desas usar un modelo personalizado, 
         pon el nombre del modelo.
 
         Comandos:
         --help, -h      Muestra esta ayuda
         --version, -v   Muestra la versión
+        opinion         Analiza el archivo TCX y da una opinión usando el comdelo
 
         Ejemplo:
-        coach actividad.tcx llama3.2:1b  
+        coach opinion actividad.tcx llama3.2:1b  
 
         Nota:
         Se usan los modelos de Ollama, por lo tanto es necesario tener ollama instalado.

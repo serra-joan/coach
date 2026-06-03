@@ -7,6 +7,7 @@ Coach es una herramienta de línea de comandos para analizar archivos de activid
 Puedes instalar Coach globalmente usando npm:
 
 ```bash
+npm install
 npm install -g .
 ```
 
