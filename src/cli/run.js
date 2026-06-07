@@ -63,9 +63,9 @@ function printDataPritty(data, debugmode) {
     console.log(pc.blue('Actividad:'), data.activity);
     console.log(pc.blue('Fecha:'), data.date);
     console.log(pc.blue('Tiempo total:'), `${data.time} minutos`);
-    console.log(pc.blue('Distancia total:'), `${(data.distance / 1000).toFixed(2)} km`);
+    console.log(pc.blue('Distancia total:'), `${data.distance} km`);
     console.log(pc.blue('Calorías totales:'), `${data.calories} kcal`);
-    console.log(pc.blue('Frecuencia cardíaca media:'), `${parseFloat(data.heartRateAverage).toFixed()} bpm`);
+    console.log(pc.blue('Frecuencia cardíaca media:'), `${data.heartRateAverage} bpm`);
     console.log(pc.blue('Frecuencia cardíaca máxima:'), `${data.maxHeartRate} bpm`);
     console.log(pc.blue('Desnivel:'), `↑${data.altitudePositive} m / ↓${data.altitudeNegative} m`);
 

@@ -124,7 +124,7 @@ function convertUnits(data) {
     data.time = (data.time / 60).toFixed(2); // Minutes
     data.distance = (data.distance / 1000).toFixed(2); // Kilometers
     data.date = new Date(data.date).toLocaleString("es-ES", { timeZone: "Europe/Madrid" });
-    data.heartRateAverage = data.heartRateAverage.toFixed(2);
+    data.heartRateAverage = data.heartRateAverage.toFixed();
 
     return data;
 }
