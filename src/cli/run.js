@@ -29,37 +29,6 @@ export async function run({model, fileName, debugmode}) {
 }
 
 function printDataPritty(data, debugmode) {
-    /*
-    Datos analizados: 
-    {
-        "time":"35.07",
-        "distance":"3.80",
-        "calories":234,
-        "intensities":[
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active",
-            "Active"
-        ],
-        "heartRateAverage":"133.24",
-        "maxHeartRate":173,
-        "altitudePositive":25,
-        "altitudeNegative":46,
-        "date":"1/6/2026, 12:04:46",
-        "activity":"Running"
-    }
-    */
     console.log(pc.blue('Actividad:'), data.activity);
     console.log(pc.blue('Fecha:'), data.date);
     console.log(pc.blue('Tiempo total:'), `${data.time} minutos`);
