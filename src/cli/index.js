@@ -1,31 +1,11 @@
 #!/usr/bin/env node
 import pc from 'picocolors';
 import { run } from './run.js';
+import { help } from './common_prints.js';
 import packageInfo from '../../package.json' with { type: 'json' };
 
 
 const CLIENT_VERSION = packageInfo.version;
-
-function help() {
-    console.log(`
-        Uso: coach <comando> <archivo.tcx> [modelo]
-        El parámetro modelo es opcional. Si desas usar un modelo personalizado, 
-        pon el nombre del modelo.
-
-        Comandos:
-        --help, -h      Muestra esta ayuda
-        --version, -v   Muestra la versión
-        run         Analiza el archivo TCX y da una opinión usando el modelo
-        run --debug Analiza el archivo TCX, da una opinión usando el modelo y muestra información adicional de debug
-
-        Ejemplo:
-        coach run actividad.tcx llama3.2:1b  
-
-        Nota:
-        Se usan los modelos de Ollama, por lo tanto es necesario tener ollama instalado.
-        Instalación de Ollama -> https://ollama.com/
-    `);
-}
 
 // Args
 const args = process.argv.slice(2);
