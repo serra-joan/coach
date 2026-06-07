@@ -4,7 +4,7 @@ import { getTCX } from '../reader/tcx.js';
 import { getOpinion } from '../api/ollama.js';
 
 // Get opinion of the .tcx run file
-export async function run({model, fileName}) {
+export async function run({model, fileName, debugmode}) {
     // Get TCX data and convert it
     const parsedData = await getTCX({model, fileName});
 
@@ -13,7 +13,7 @@ export async function run({model, fileName}) {
         return;
     }
 
-    printDataPritty(parsedData);
+    printDataPritty(parsedData, debugmode);
 
     // API IA
     // Send parsedData to the AI API
@@ -28,7 +28,7 @@ export async function run({model, fileName}) {
     return;
 }
 
-function printDataPritty(data) {
+function printDataPritty(data, debugmode) {
     /*
     Datos analizados: 
     {
@@ -68,4 +68,8 @@ function printDataPritty(data) {
     console.log(pc.blue('Frecuencia cardíaca media:'), `${parseFloat(data.heartRateAverage).toFixed()} bpm`);
     console.log(pc.blue('Frecuencia cardíaca máxima:'), `${data.maxHeartRate} bpm`);
     console.log(pc.blue('Desnivel:'), `↑${data.altitudePositive} m / ↓${data.altitudeNegative} m`);
-}
+
+    if (debugmode) {
+        console.log(pc.yellow('Debug -> print json:'), JSON.stringify(data, null, 2));
+    }
+} 

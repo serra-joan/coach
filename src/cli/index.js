@@ -16,6 +16,7 @@ function help() {
         --help, -h      Muestra esta ayuda
         --version, -v   Muestra la versión
         run         Analiza el archivo TCX y da una opinión usando el modelo
+        run --debug Analiza el archivo TCX, da una opinión usando el modelo y muestra información adicional de debug
 
         Ejemplo:
         coach run actividad.tcx llama3.2:1b  
@@ -41,16 +42,22 @@ if (args.includes('--help') || args.includes('-h')) {
 
 }else {
     const command = args[0];
+    // Get flags
+    const flags = args.filter(arg => arg.startsWith('--') || arg.startsWith('-'));
+    const debugmode = flags.includes('--debug');
 
     if(!command) {
         console.error(pc.red(`Argumento no especificado.`));
         help();
     }
 
+    // Warning if debug mode is enabled
+    if (debugmode) console.log(pc.yellow('Debug mode enabled'));
+
     switch(command) {
         case 'run':
             // Read the TCX file and analyze it with the AI API
-            await run({model: args[2], fileName: args[1]});
+            await run({model: args[2], fileName: args[1], debugmode});
             break;
 
         default:
