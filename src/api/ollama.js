@@ -55,15 +55,21 @@ export async function getOpinion({data, model = null}) {
         const result = await response.json();
         const cleanedResponse = cleanText(result.response);
         return {statusCode: 200, body: {msg: cleanedResponse, model}};
+
     } catch (err) {
         return {statusCode: 500, body: err.message};
     }
 }
 
 function cleanText(text) {
-    return text
-        .split('\n')
+    // Remove <think> ... </think> if exists
+    text = text.replace(/<think>[\s\S]*?<\/think>/g, '');
+
+    // Remove line breaks and extra spaces
+    text.split('\n')
         .map(line => line.startsWith('+') ? line.slice(1) : line)
         .join('')
         .trim();
+
+    return text;
 }
