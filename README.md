@@ -28,14 +28,14 @@ Esto mostrará la ayuda con todos los comandos y opciones disponibles.
 ## Ejemplo básico
 
 ```bash
-coach opinion ruta/archivo.tcx 
+coach run ruta/archivo.tcx 
 ```
 
 Esto analizará el archivo y mostrará un resumen en la terminal.
 
 Puedes usar cualquier modelo de Ollama que desees añadiendolo como último parámetro.
 ```bash
-coach opinion ruta/archivo.tcx llama3.2:1b
+coach run ruta/archivo.tcx llama3.2:1b
 ```
 
 ## Funcionalidades principales

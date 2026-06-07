@@ -40,20 +40,24 @@ export async function getOpinion({data, model = null}) {
         prompt: prompt,
     }
 
-    const response = await fetch(`${URL_API}api/generate`, {
-        method: 'POST',
-        headers: HEADERS_API,
-        body: JSON.stringify(body)
-    })
+    try {
+        const response = await fetch(`${URL_API}api/generate`, {
+            method: 'POST',
+            headers: HEADERS_API,
+            body: JSON.stringify(body)
+        })
 
-    if(!response.ok) {
-        const err = await response.text();
-        return {statusCode: response.status, body: err};
+        if(!response.ok) {
+            const err = await response.text();
+            return {statusCode: response.status, body: err};
+        }
+
+        const result = await response.json();
+        const cleanedResponse = cleanText(result.response);
+        return {statusCode: 200, body: {msg: cleanedResponse, model}};
+    } catch (err) {
+        return {statusCode: 500, body: err.message};
     }
-
-    const result = await response.json();
-    const cleanedResponse = cleanText(result.response);
-    return {statusCode: 200, body: {msg: cleanedResponse, model}};
 }
 
 function cleanText(text) {

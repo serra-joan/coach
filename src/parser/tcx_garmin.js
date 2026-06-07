@@ -39,7 +39,8 @@ function processLaps(laps) {
     let heartRatesArray = [];
     let maxHeartRateArray = [];
 
-    laps.forEach(lap => { // For each lap, general information per lap. 
+    // For each lap, general information per lap. 
+    laps.forEach(lap => {
         // Raw data
         const [ distance ] = lap.DistanceMeters;
         const [ time ] = lap.TotalTimeSeconds;
