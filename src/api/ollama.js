@@ -41,6 +41,9 @@ export async function getOpinion({data, model = null}) {
     }
 
     try {
+        // Loading text
+        console.log(`Esperando respuesta del modelo ${model ?? 'desconocido'}...`);
+
         const response = await fetch(`${URL_API}api/generate`, {
             method: 'POST',
             headers: HEADERS_API,

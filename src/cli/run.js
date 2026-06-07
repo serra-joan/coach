@@ -22,8 +22,7 @@ export async function run({model, fileName, debugmode}) {
         console.error(pc.bgRed('ERROR ON API:'), response.body);
         return;
     }
-
-    console.log(pc.green(response.body.model ?? 'Unknown model') + ':');
+    
     console.log(response.body.msg);
     return;
 }
