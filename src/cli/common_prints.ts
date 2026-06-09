@@ -1,20 +1,24 @@
 export function help() {
     console.log(`
-        Uso: coach <comando> <archivo.tcx> [modelo]
-        El parámetro modelo es opcional. Si desas usar un modelo personalizado, 
-        pon el nombre del modelo.
+        Example usage:
+          coach run <archivo.tcx>                 Analizes the TCX file and gives an opinion using the default model
+          coach run <archivo.tcx> llama3.2:1b     Analizes the TCX file and gives an opinion using the llama3.2:1b model
+            
+          Fleags:
+            --no-ai         Skip the AI analysis, only parse and print the data
+            --debug          Enable debug mode, which prints additional information about the activity
+        
 
-        Comandos:
-        --help, -h      Muestra esta ayuda
-        --version, -v   Muestra la versión
-        run         Analiza el archivo TCX y da una opinión usando el modelo
-        run --debug Analiza el archivo TCX, da una opinión usando el modelo y muestra información adicional de debug
+        Fleags:
+          --help, -h      Show this help message
+          --version, -v   Show the version of the client
 
-        Ejemplo:
-        coach run actividad.tcx llama3.2:1b  
 
-        Nota:
-        Se usan los modelos de Ollama, por lo tanto es necesario tener ollama instalado.
-        Instalación de Ollama -> https://ollama.com/
+        Note:
+          The models use Ollama as backend, so you need to have it installed and running on your machine to use custom models or the default one.
+          In the future will be added a config file to set other api url to use the models without the need of having Ollama installed locally.
+          Actual API url: http://localhost:11434/
+        
+          Ollama installation -> https://ollama.com/
     `);
 }

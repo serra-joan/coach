@@ -30,6 +30,7 @@ if (args.includes('--help') || args.includes('-h')) {
     // Get flags
     const flags = args.filter(arg => arg.startsWith('--') || arg.startsWith('-'));
     const debugmode = flags.includes('--debug');
+    const notRunModel = flags.includes('--no-ai');
 
     if(!command) {
         console.error(pc.red(`Argumento no especificado.`));
@@ -42,7 +43,7 @@ if (args.includes('--help') || args.includes('-h')) {
     switch(command) {
         case 'run':
             // Read the TCX file and analyze it with the AI API
-            await run({model: args[2], fileName: args[1], debugmode});
+            await run({model: args[2], fileName: args[1], debugmode, notRunModel});
             break;
 
         default:

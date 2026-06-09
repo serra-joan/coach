@@ -4,7 +4,7 @@ import { getTCX } from '../reader/tcx.js';
 import { getOpinion } from '../api/ollama.js';
 import type { CoachActivityData } from '../types.js';
 
-export async function run({ model, fileName, debugmode }: { model?: string; fileName?: string; debugmode: boolean }) {
+export async function run({ model, fileName, debugmode, notRunModel }: { model?: string; fileName?: string; debugmode: boolean; notRunModel: boolean }) {
     if (!fileName) {
         console.error(pc.red('No se ha especificado archivo TCX.'));
         return;
@@ -19,7 +19,14 @@ export async function run({ model, fileName, debugmode }: { model?: string; file
 
     printDataPritty(parsedData, debugmode);
 
+
     // API IA
+    // ai can be skipped with --no-ai flag
+    if (notRunModel) {
+        console.log(pc.yellow('AI analysis skipped.'));
+        return;
+    }
+    
     // Send parsedData to the AI API
     const response = await getOpinion({ data: parsedData, model });
     if (response.statusCode !== 200) {
