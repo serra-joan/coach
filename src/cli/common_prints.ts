@@ -8,12 +8,11 @@ export function help() {
             --no-ai           Skip the AI analysis, only parse and print the data
             --debug           Enable debug mode, which prints additional information about the activity
             --model, -m       Specify the model to use for the AI analysis (default is the one set in the API module, which is 'coach:latest')
-        
+            --prompt, -p      Specify a custom prompt to send to the model.
 
-        Fleags:
-          --help, -h      Show this help message
-          --version, -v   Show the version of the client
-
+        Other commands:
+          coach --help, -h      Show this help message
+          coach --version, -v   Show the version of the client
 
         Note:
           The models use Ollama as backend, so you need to have it installed and running on your machine to use custom models or the default one.

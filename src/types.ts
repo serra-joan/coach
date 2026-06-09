@@ -21,3 +21,11 @@ export interface RawActivityData {
   altitudePositive: number;
   altitudeNegative: number;
 }
+
+export interface OllamaApiBody {
+  think: boolean;
+  stream: boolean;
+  model: string;
+  system: string;
+  prompt?: string;
+}

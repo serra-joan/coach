@@ -1,10 +1,10 @@
 
 import pc from 'picocolors';
 import { getTCX } from '../reader/tcx.js';
-import { getOpinion } from '../api/ollama.js';
+import { fetchToModel } from '../api/ollama.js';
 import type { CoachActivityData } from '../types.js';
 
-export async function run({ model, fileName, debugmode, notRunModel }: { model?: string; fileName?: string; debugmode: boolean; notRunModel: boolean }) {
+export async function run({ model, prompt, fileName, debugmode, notRunModel }: { model?: string; prompt?: string; fileName?: string; debugmode: boolean; notRunModel: boolean }) {
     if (!fileName) {
         console.error(pc.red('No se ha especificado archivo TCX.'));
         return;
@@ -28,7 +28,7 @@ export async function run({ model, fileName, debugmode, notRunModel }: { model?:
     }
     
     // Send parsedData to the AI API
-    const response = await getOpinion({ data: parsedData, model });
+    const response = await fetchToModel({ data: parsedData, model, prompt, debugmode });
     if (response.statusCode !== 200) {
         console.error(pc.bgRed('ERROR ON API:'), response.body);
         return;
