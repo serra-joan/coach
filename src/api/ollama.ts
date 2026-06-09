@@ -2,6 +2,7 @@
  * Api to call Ollama models
  */
 
+import type { CoachActivityData } from '../types.js';
 import prompts from '../prompts/prompts.json' with { type: 'json' };
 
 const MODEL_API = 'lfm2.5-thinking:latest';
@@ -11,11 +12,11 @@ const HEADERS_API = {
     'Accept': 'application/json'
 };
 
-export async function getOpinion({data, model = null}) {
-    if(!model) model = MODEL_API;
-    if(!prompts.opinion) {
+export async function getOpinion({ data, model = null }: { data: CoachActivityData; model?: string | null }): Promise<{ statusCode: number; body: string | { msg: string; model: string } }> {
+    if (!model) model = MODEL_API;
+    if (!prompts.opinion) {
         console.error('No se ha definido el prompt de opinion');
-        return;
+        return { statusCode: 500, body: 'No se ha definido el prompt de opinion' };
     }
 
     let prompt = prompts.opinion;
@@ -26,50 +27,48 @@ export async function getOpinion({data, model = null}) {
     prompt = prompt.replace('{distance}', data.distance);
     prompt = prompt.replace('{calories}', data.calories);
     prompt = prompt.replace('{activity}', data.activity);
-    prompt = prompt.replace('{intensities}', data.intensities);
-    prompt = prompt.replace('{maxHeartRate}', data.maxHeartRate);
-    prompt = prompt.replace('{altitudPositive}', data.altitudePositive);
-    prompt = prompt.replace('{altitudNegative}', data.altitudeNegative);
+    prompt = prompt.replace('{intensities}', data.intensities.join(', '));
+    prompt = prompt.replace('{maxHeartRate}', String(data.maxHeartRate));
+    prompt = prompt.replace('{altitudPositive}', String(data.altitudePositive));
+    prompt = prompt.replace('{altitudNegative}', String(data.altitudeNegative));
     prompt = prompt.replace('{heartRateAverage}', data.heartRateAverage);
-
 
     const body = {
         think: false,
         stream: false,
-        model: model,
-        prompt: prompt,
-    }
+        model,
+        prompt
+    };
 
     try {
-        // Loading text
         console.log(`Esperando respuesta del modelo ${model ?? 'desconocido'}...`);
 
         const response = await fetch(`${URL_API}api/generate`, {
             method: 'POST',
             headers: HEADERS_API,
             body: JSON.stringify(body)
-        })
+        });
 
-        if(!response.ok) {
+        if (!response.ok) {
             const err = await response.text();
-            return {statusCode: response.status, body: err};
+            return { statusCode: response.status, body: err };
         }
 
         const result = await response.json();
         const cleanedResponse = cleanText(result.response);
-        return {statusCode: 200, body: {msg: cleanedResponse, model}};
-
+        return { statusCode: 200, body: { msg: cleanedResponse, model } };
     } catch (err) {
-        return {statusCode: 500, body: err.message};
+        return { statusCode: 500, body: err instanceof Error ? err.message : String(err) };
     }
 }
 
-function cleanText(text) {
+function cleanText(text: string) {
     // Remove <think> ... </think> if exists
     text = text.replace(/<think>[\s\S]*?<\/think>/g, '');
 
     // Remove line breaks and extra spaces
-    text.split('\n')
+    text = text
+        .split('\n')
         .map(line => line.startsWith('+') ? line.slice(1) : line)
         .join('')
         .trim();

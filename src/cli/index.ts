@@ -1,9 +1,14 @@
 #!/usr/bin/env node
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
 import { run } from './run.js';
 import { help } from './common_prints.js';
-import packageInfo from '../../package.json' with { type: 'json' };
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const packageJsonPath = path.join(__dirname, '../../package.json');
+const packageInfo = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')) as { version: string };
 
 const CLIENT_VERSION = packageInfo.version;
 

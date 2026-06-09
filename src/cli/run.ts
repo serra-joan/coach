@@ -2,14 +2,18 @@
 import pc from 'picocolors';
 import { getTCX } from '../reader/tcx.js';
 import { getOpinion } from '../api/ollama.js';
+import type { CoachActivityData } from '../types.js';
 
-// Get opinion of the .tcx run file
-export async function run({model, fileName, debugmode}) {
-    // Get TCX data and convert it
-    const parsedData = await getTCX({model, fileName});
+export async function run({ model, fileName, debugmode }: { model?: string; fileName?: string; debugmode: boolean }) {
+    if (!fileName) {
+        console.error(pc.red('No se ha especificado archivo TCX.'));
+        return;
+    }
 
-    if(!parsedData) {
-        console.log(pc.bgRed('No data!:'), 'No hay data a analizar')
+    const parsedData = await getTCX({ model, fileName });
+
+    if (!parsedData) {
+        console.log(pc.bgRed('No data!:'), 'No hay data a analizar');
         return;
     }
 
@@ -17,17 +21,21 @@ export async function run({model, fileName, debugmode}) {
 
     // API IA
     // Send parsedData to the AI API
-    const response = await getOpinion({data: parsedData, model});
-    if(response.statusCode !== 200) {
+    const response = await getOpinion({ data: parsedData, model });
+    if (response.statusCode !== 200) {
         console.error(pc.bgRed('ERROR ON API:'), response.body);
         return;
     }
-    
-    console.log(response.body.msg);
+
+    if (typeof response.body === 'string') {
+        console.log(response.body);
+    } else {
+        console.log(response.body.msg);
+    }
     return;
 }
 
-function printDataPritty(data, debugmode) {
+function printDataPritty(data: CoachActivityData, debugmode: boolean) {
     console.log(pc.blue('Actividad:'), data.activity);
     console.log(pc.blue('Fecha:'), data.date);
     console.log(pc.blue('Tiempo total:'), `${data.time} minutos`);
