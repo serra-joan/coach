@@ -1,12 +1,13 @@
 export function help() {
     console.log(`
         Example usage:
-          coach run <archivo.tcx>                 Analizes the TCX file and gives an opinion using the default model
-          coach run <archivo.tcx> llama3.2:1b     Analizes the TCX file and gives an opinion using the llama3.2:1b model
+          coach run <archivo.tcx>                         Analizes the TCX file and gives an opinion using the default model
+          coach run <archivo.tcx> --model llama3.2:1b     Analizes the TCX file and gives an opinion using the llama3.2:1b model
             
           Fleags:
-            --no-ai         Skip the AI analysis, only parse and print the data
-            --debug          Enable debug mode, which prints additional information about the activity
+            --no-ai           Skip the AI analysis, only parse and print the data
+            --debug           Enable debug mode, which prints additional information about the activity
+            --model, -m       Specify the model to use for the AI analysis (default is the one set in the API module, which is 'coach:latest')
         
 
         Fleags:
