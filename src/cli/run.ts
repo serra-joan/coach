@@ -1,7 +1,7 @@
 
 import pc from 'picocolors';
 import { getTCX } from '../reader/tcx.js';
-import { fetchToModel } from '../api/ollama.js';
+import { fetchToModel } from '../api/model.js';
 import type { CoachActivityData } from '../types.js';
 
 export async function run({ model, prompt, fileName, debugmode, notRunModel }: { model?: string; prompt?: string; fileName?: string; debugmode: boolean; notRunModel: boolean }) {
