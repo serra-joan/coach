@@ -27,8 +27,40 @@ if (args.includes('--help') || args.includes('-h')) {
 
 }else {
     const command = args[0];
+    if(!isValidCommand(command)) {
+        console.error(pc.red(`"${command}" unknown command.`));
+        help();
+        process.exit(0);
+    }
 
     // Get flags
+    const { debugmode, notRunModel, model, prompt } = getFlags(args);
+
+    // Warning if debug mode is enabled
+    if (debugmode) console.log(pc.yellow('Debug mode enabled'));
+
+    switch(command) {
+        case 'run':
+            // Read the TCX file and analyze it with the AI API
+            await run({model, prompt, fileName: args[1], debugmode, notRunModel});
+            break;
+
+        default:
+            console.error(pc.red(`"${command}" argumento desconocido.`));
+            help();
+            process.exit(0);
+    }
+
+    process.exit(0);
+}
+
+function isValidCommand(command: string) {
+    const validCommands = ['run'];
+    return validCommands.includes(command);
+}
+
+// get flags from args
+function getFlags(args: string[]) {
     const flags = args.filter(arg => arg.startsWith('--') || arg.startsWith('-'));
     const debugmode = flags.includes('--debug');
     const notRunModel = flags.includes('--no-ai');
@@ -44,25 +76,10 @@ if (args.includes('--help') || args.includes('-h')) {
     let prompt: string | undefined = undefined;
     if (promptFlagIndex !== -1 && args.length > promptFlagIndex + 1) prompt = args[promptFlagIndex + 1];
 
-    
-    if(!command) {
-        console.error(pc.red(`Argumento no especificado.`));
-        help();
-    }
-
-    // Warning if debug mode is enabled
-    if (debugmode) console.log(pc.yellow('Debug mode enabled'));
-
-    switch(command) {
-        case 'run':
-            // Read the TCX file and analyze it with the AI API
-            await run({model, prompt, fileName: args[1], debugmode, notRunModel});
-            break;
-
-        default:
-            console.error(pc.red(`"${command}" argumento desconocido.`));
-            help(); // Exit proccess
-    }
-
-    process.exit(0);
+    return { 
+        debugmode: debugmode, 
+        notRunModel: notRunModel, 
+        model: model, 
+        prompt: prompt 
+    };
 }
