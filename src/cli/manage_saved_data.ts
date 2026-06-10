@@ -28,10 +28,15 @@ export async function save(data: CoachActivityData, debugmode = false) {
             ? JSON.parse(fs.readFileSync(filePath, 'utf-8')) as CoachActivityData[]
             : [] as CoachActivityData[]
 
-        // add new data 
-        existing.push(data)
+        // check if the activity already exists (same date)
+        const alreadyExists = existing.some((activity) => activity.date === data.date)
+        if (alreadyExists) {
+            if (debugmode) console.log(ps.yellow('Activity already exists, skipping save.'))
+            return
+        }
 
-        // write
+        // add new data  and write file
+        existing.push(data)
         fs.writeFileSync(filePath, JSON.stringify(existing, null, 2), 'utf-8')
 
     } catch (err) {
