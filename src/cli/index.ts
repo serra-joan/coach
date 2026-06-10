@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
 import { run } from './run.js';
 import { help } from './common_prints.js';
+import { config } from '../config.d/coach.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJsonPath = path.join(__dirname, '../../package.json');
@@ -34,7 +35,7 @@ if (args.includes('--help') || args.includes('-h')) {
     }
 
     // Get flags
-    const { debugmode, notRunModel, model, prompt } = getFlags(args);
+    const { debugmode, notRunModel, model, prompt, useSavedData } = getFlags(args);
 
     // Warning if debug mode is enabled
     if (debugmode) console.log(pc.yellow('Debug mode enabled'));
@@ -42,7 +43,12 @@ if (args.includes('--help') || args.includes('-h')) {
     switch(command) {
         case 'run':
             // Read the TCX file and analyze it with the AI API
-            await run({model, prompt, fileName: args[1], debugmode, notRunModel});
+            await run({
+                model, 
+                prompt, 
+                fileName: args[1], 
+                flags: { debugmode, notRunModel, useSavedData }
+            });
             break;
 
         default:
@@ -76,10 +82,16 @@ function getFlags(args: string[]) {
     let prompt: string | undefined = undefined;
     if (promptFlagIndex !== -1 && args.length > promptFlagIndex + 1) prompt = args[promptFlagIndex + 1];
 
+    // get if the saved data has to be used or not, with a flag --use-saved-data or --no-use-saved-data
+    const useSavedDataFlagIndex = args.findIndex(arg => arg === '--use-saved-data' || arg === '--no-use-saved-data');
+    let useSavedData: boolean = config.USE_SAVED_DATA; // default value
+    if (useSavedDataFlagIndex !== -1) useSavedData = args[useSavedDataFlagIndex] === '--use-saved-data';
+
     return { 
         debugmode: debugmode, 
         notRunModel: notRunModel, 
         model: model, 
-        prompt: prompt 
+        prompt: prompt ,
+        useSavedData: useSavedData
     };
 }

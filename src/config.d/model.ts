@@ -20,5 +20,6 @@ export const modelConfig = {
             - Altitud negativa -> {altitudNegative} metros. 
             - Fecha y hora -> {date}. 
             - Tipo de actividad -> {activity}.
-    `
+    `,
+    additionalData: `Además, estas son otras actividades que realizó el usuario: {savedActivities}. Ten en cuenta esta información para valorar el rendimiento del entreno actual. También ten en cuenta el día en que las realizó para tener una buena linea del timepo entre descansos y entrenos.`
 }

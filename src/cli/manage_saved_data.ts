@@ -3,6 +3,7 @@ import ps from 'picocolors'
 import path from 'node:path'
 import { CoachActivityData } from '../types.js'
 
+// save the data if no is already exist on a .json from his type.
 export async function save(data: CoachActivityData, debugmode = false) {
     const dir = path.resolve(process.cwd(), 'data', 'activities')
     
@@ -42,5 +43,23 @@ export async function save(data: CoachActivityData, debugmode = false) {
     } catch (err) {
         if (!debugmode) console.log(ps.bgRed('ERROR SAVING DATA:'), "Run with --debug to see more details")
         else console.error(ps.bgRed('ERROR SAVING DATA:'), err)
+    }
+}
+
+// list the save data of the type
+export async function list(activityType: string, debugmode = false, parsed = false): Promise<CoachActivityData[] | string> {
+    const dir = path.resolve(process.cwd(), 'data', 'activities')
+    const filePath = path.join(dir, `${activityType.toLowerCase().replace(/\s+/g, '_')}.json`)
+
+    if (!fs.existsSync(filePath)) return []
+
+    try {
+        if (parsed) return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as CoachActivityData[]
+        else return fs.readFileSync(filePath, 'utf-8') as string
+        
+    } catch (err) {
+        if (!debugmode) console.log(ps.bgRed('ERROR READING SAVED DATA:'), "Run with --debug to see more details")
+        else console.error(ps.bgRed('ERROR READING SAVED DATA:'), err)
+        return []
     }
 }

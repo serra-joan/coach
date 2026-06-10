@@ -11,7 +11,7 @@ const URL_API = config.API_URL;
 const MODEL_API = config.MODEL_TO_USE;
 const HEADERS_API = config.HEADERS_API;
 
-export async function fetchToModel({ data, model = null, prompt, debugmode = false }: { data: CoachActivityData; model?: string | null, prompt?: string | null, debugmode: boolean }): Promise<{ statusCode: number; body: string | { msg: string; model: string } }> {
+export async function fetchToModel({ data, model = null, prompt, savedActivities = null, debugmode = false }: { data: CoachActivityData; model?: string | null, prompt?: string | null, savedActivities?: string | null, debugmode: boolean }): Promise<{ statusCode: number; body: string | { msg: string; model: string } }> {
     if (!model) model = MODEL_API;
     if (!modelConfig.system) {
         console.error(pc.red('No se ha definido el prompt de opinion'));
@@ -31,6 +31,12 @@ export async function fetchToModel({ data, model = null, prompt, debugmode = fal
     systemText = systemText.replace('{altitudPositive}', String(data.altitudePositive));
     systemText = systemText.replace('{altitudNegative}', String(data.altitudeNegative));
     systemText = systemText.replace('{heartRateAverage}', data.heartRateAverage);
+
+    // if there are saved activities, add the additionalData to the system prompt
+    if (savedActivities && savedActivities.trim() !== '') {
+        systemText += modelConfig.additionalData;
+        systemText = systemText.replace('{savedActivities}', savedActivities);
+    }
 
     let body: OllamaApiBody = {
         think: true,
@@ -62,6 +68,7 @@ export async function fetchToModel({ data, model = null, prompt, debugmode = fal
 
         const result = await response.json();
         const cleanedResponse = cleanText(result.response);
+        //console.log(result, `${URL_API}api/generate`, bodyJSON);
         return { statusCode: 200, body: { msg: cleanedResponse, model } };
     } catch (err) {
         return { statusCode: 500, body: err instanceof Error ? err.message : String(err) };

@@ -6,5 +6,6 @@ export const config = {
         'Accept': 'application/json'
     },
     SAVE_DATA: true, // Default true. Save the data of the training in json files.
+    USE_SAVED_DATA: false, // Default false. Use the saved data of the same activity type to send to the model.
     
 } as const

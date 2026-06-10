@@ -4,11 +4,15 @@ import { getTCX } from '../reader/tcx.js';
 import { fetchToModel } from '../api/model.js';
 import { config } from '../config.d/coach.js';
 import type { CoachActivityData } from '../types.js';
-import { save as saveData } from './manage_saved_data.js';
+import { save as saveData, list as listData } from './manage_saved_data.js';
 
 const SAVE_DATA: boolean = config.SAVE_DATA; // Save the data of the training in json files. Default true.
+const USE_SAVED_DATA: boolean = true; // Use the saved data of the same activity type to send to the model. Default true.
 
-export async function run({ model, prompt, fileName, debugmode, notRunModel }: { model?: string; prompt?: string; fileName?: string; debugmode: boolean; notRunModel: boolean }) {
+export async function run({ model, prompt, fileName, flags }
+    : { model?: string; prompt?: string; fileName?: string; flags: { debugmode: boolean; notRunModel: boolean; useSavedData: boolean } }) {
+    const { debugmode, notRunModel, useSavedData } = flags;
+
     if (!fileName) {
         console.error(pc.red('No se ha especificado archivo TCX.'));
         return;
@@ -33,9 +37,16 @@ export async function run({ model, prompt, fileName, debugmode, notRunModel }: {
         console.log(pc.yellow('AI analysis skipped.'));
         return;
     }
+
+    // if the saved data has to be used
+    let savedActivities: string | null = null
+    if ((USE_SAVED_DATA && useSavedData) || useSavedData) {
+        console.log(pc.yellow('Debug -> using saved data of the same activity type:'));
+        savedActivities = await listData(parsedData.activity, debugmode) as string;
+    }
     
     // Send parsedData to the AI API
-    const response = await fetchToModel({ data: parsedData, model, prompt, debugmode });
+    const response = await fetchToModel({ data: parsedData, model, prompt, savedActivities: savedActivities || null, debugmode });
     if (response.statusCode !== 200) {
         console.error(pc.bgRed('ERROR ON API:'), response.body);
         return;
