@@ -4,14 +4,12 @@
 
 import type { CoachActivityData, OllamaApiBody } from '../types.js';
 import { modelConfig } from '../config.d/model.js';
+import { config } from '../config.d/coach.js';
 import pc from 'picocolors';
 
-const MODEL_API = 'lfm2.5-thinking:latest';
-const URL_API = 'http://localhost:11434/';
-const HEADERS_API = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-};
+const URL_API = config.API_URL;
+const MODEL_API = config.MODEL_TO_USE;
+const HEADERS_API = config.HEADERS_API;
 
 export async function fetchToModel({ data, model = null, prompt, debugmode = false }: { data: CoachActivityData; model?: string | null, prompt?: string | null, debugmode: boolean }): Promise<{ statusCode: number; body: string | { msg: string; model: string } }> {
     if (!model) model = MODEL_API;
