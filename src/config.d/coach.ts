@@ -4,6 +4,7 @@ export const config = {
     HEADERS_API: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
-    }
+    },
+    SAVE_DATA: true, // Default true. Save the data of the training in json files.
     
 } as const

@@ -44,3 +44,8 @@ coverage/
 *.tmp
 
 TODO.md
+data/*
+!data/.gitkeep
+!data/activities/
+data/activities/*
+!data/activities/.gitkeep

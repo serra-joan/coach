@@ -2,7 +2,11 @@
 import pc from 'picocolors';
 import { getTCX } from '../reader/tcx.js';
 import { fetchToModel } from '../api/model.js';
+import { config } from '../config.d/coach.js';
 import type { CoachActivityData } from '../types.js';
+import { save as saveData } from './manage_saved_data.js';
+
+const SAVE_DATA: boolean = config.SAVE_DATA; // Save the data of the training in json files. Default true.
 
 export async function run({ model, prompt, fileName, debugmode, notRunModel }: { model?: string; prompt?: string; fileName?: string; debugmode: boolean; notRunModel: boolean }) {
     if (!fileName) {
@@ -19,6 +23,9 @@ export async function run({ model, prompt, fileName, debugmode, notRunModel }: {
 
     printDataPritty(parsedData, debugmode);
 
+    if (SAVE_DATA) {
+        saveData(parsedData, debugmode);
+    }
 
     // API IA
     // ai can be skipped with --no-ai flag
