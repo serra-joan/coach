@@ -53,9 +53,9 @@ export async function run({ model, prompt, fileName, flags }
     }
 
     if (typeof response.body === 'string') {
-        console.log(response.body);
+        console.log(response.body || pc.yellow('No response from model'));
     } else {
-        console.log(response.body.msg);
+        console.log(response.body.msg || pc.yellow('No response from model'));
     }
     return;
 }
