@@ -4,15 +4,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
 import { run } from './run.js';
-import { help, commands } from '../utils/common_prints.js';
+import { help, commands, version } from '../utils/common_prints.js';
 import { config } from '../config.d/coach.js';
 import { activities, ALLOWED_ACTIONS } from './activities.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const packageJsonPath = path.join(__dirname, '../../package.json');
-const packageInfo = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')) as { version: string };
 
-const CLIENT_VERSION = packageInfo.version;
 
 // Args
 const args = process.argv.slice(2);
@@ -24,7 +20,7 @@ if (args.includes('--help') || args.includes('-h')) {
 
     // Version
 }else if (args.includes('--version') || args.includes('-v')) {
-    console.log(`coach versión ${CLIENT_VERSION}`);
+    version();
     process.exit(0);
 
 }else {

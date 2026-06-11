@@ -1,3 +1,7 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 export function help() {
     console.log(`
 Example usage:
@@ -44,4 +48,12 @@ activities:
     open <type>         Print the data of the activity with the specified type
     remove <type>       Remove the activity with the specified type
 `);
+}
+
+export function version() {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const packageJsonPath = path.join(__dirname, '../../package.json');
+  const packageInfo = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')) as { version: string };
+
+  console.log(`coach versión ${packageInfo.version || 'unknown'}`);
 }
