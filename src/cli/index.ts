@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
 import { run } from './run.js';
 import { help, commands, version } from '../utils/common_prints.js';
