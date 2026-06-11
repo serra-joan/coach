@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { parseTCX } from '../parser/tcx_garmin.js';
+import { parseTCX } from './tcx_garmin.js';
 import type { CoachActivityData } from '../types.js';
 
 // Parse the TCX data and converted to and Object

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
 import { run } from './run.js';
-import { help } from './common_prints.js';
+import { help } from '../utils/common_prints.js';
 import { config } from '../config.d/coach.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -51,6 +51,10 @@ if (args.includes('--help') || args.includes('-h')) {
             });
             break;
 
+        case 'activities':
+            console.log(pc.yellow('Comando "activities" no implementado aún.'));
+            break;
+
         default:
             console.error(pc.red(`"${command}" argumento desconocido.`));
             help();
@@ -61,7 +65,7 @@ if (args.includes('--help') || args.includes('-h')) {
 }
 
 function isValidCommand(command: string) {
-    const validCommands = ['run'];
+    const validCommands = ['run', 'activities'];
     return validCommands.includes(command);
 }
 

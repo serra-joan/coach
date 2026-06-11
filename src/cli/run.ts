@@ -1,10 +1,10 @@
 
 import pc from 'picocolors';
-import { getTCX } from '../reader/tcx.js';
+import { getTCX } from '../utils/reader_tcx.js';
 import { fetchToModel } from '../api/model.js';
 import { config } from '../config.d/coach.js';
 import type { CoachActivityData } from '../types.js';
-import { save as saveData, list as listData } from './manage_saved_data.js';
+import { save as saveData, list as listData } from '../utils/manage_saved_data.js';
 
 const SAVE_DATA: boolean = config.SAVE_DATA; // Save the data of the training in json files. Default true.
 const USE_SAVED_DATA: boolean = true; // Use the saved data of the same activity type to send to the model. Default true.
