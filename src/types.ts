@@ -23,7 +23,7 @@ export interface RawActivityData {
 }
 
 export interface OllamaApiBody {
-  think: boolean;
+  think: boolean | 'high' | 'medium' | 'low';
   stream: boolean;
   model: string;
   messages: {
@@ -33,4 +33,26 @@ export interface OllamaApiBody {
   options: {
       temperature: number;
   };
+}
+
+export interface Config {
+  API_URL: string;
+  MODEL_TO_USE: string;
+  HEADERS_API: {
+      'Content-Type': string;
+      'Accept': string;
+  };
+  SAVE_DATA: boolean;
+  USE_SAVED_DATA: boolean;
+  TEMPERATURE: number;
+  THINK: boolean | 'high' | 'medium' | 'low';
+}
+
+export interface ConfigOverride {
+  API_URL?: string;
+  MODEL_TO_USE?: string;
+  SAVE_DATA?: boolean;
+  USE_SAVED_DATA?: boolean;
+  TEMPERATURE?: number;
+  THINK?: boolean | 'high' | 'medium' | 'low';
 }

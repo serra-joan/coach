@@ -5,10 +5,12 @@ Example usage:
   coach run <archivo.tcx> --model llama3.2:1b     Analizes the TCX file and gives an opinion using the llama3.2:1b model
             
 Flags:
-  --no-ai           Skip the AI analysis, only parse and print the data
-  --debug           Enable debug mode, which prints additional information about the activity
-  --model, -m       Specify the model to use for the AI analysis (default is the one set in the API module, which is 'coach:latest')
-  --prompt, -p      Specify a custom prompt to send to the model.
+  --no-ai               Skip the AI analysis, only parse and print the data
+  --debug               Enable debug mode, which prints additional information about the activity
+  --model, -m           Specify the model to use for the AI analysis (default is the one set in the API module, which is 'coach:latest')
+  --prompt, -p          Specify a custom prompt to send to the model.
+  --use-saved-data      Use the saved data of the same activity type to send to the model, if exists. Default false.
+  --no-use-saved-data   Do not use the saved data of the same activity type to send to the model, even if exists. This flag has priority over --use-saved-data.
 
 Other commands:
   coach --help, -h      Show this help message
