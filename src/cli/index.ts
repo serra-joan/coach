@@ -6,6 +6,7 @@ import pc from 'picocolors';
 import { run } from './run.js';
 import { help } from '../utils/common_prints.js';
 import { config } from '../config.d/coach.js';
+import { activities, ALLOWED_ACTIONS } from './activities.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJsonPath = path.join(__dirname, '../../package.json');
@@ -52,7 +53,22 @@ if (args.includes('--help') || args.includes('-h')) {
             break;
 
         case 'activities':
-            console.log(pc.yellow('Comando "activities" no implementado aún.'));
+            // need the second argument, which is the type of the activity, like "running" or "cycling"
+            if (args.length < 2) {
+                console.error(pc.red('The "activities" command needs a second argument'));
+                help();
+                process.exit(0);
+            }
+
+            // the second argument is the action to do with the activities, like "list" or "open"
+            const action = args[1] as typeof ALLOWED_ACTIONS[number];
+            if (!ALLOWED_ACTIONS.includes(action)) { // check if the action is allowed
+                console.error(pc.red(`"${action}" is not a valid action.`),  `Allowed actions are: ${ALLOWED_ACTIONS.join(', ')}`);
+                help();
+                process.exit(0);
+            }
+
+            activities(action, args[2] || undefined); // the third argument is the type of the activity, like "running" or "cycling"
             break;
 
         default:
