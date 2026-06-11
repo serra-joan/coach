@@ -4,7 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pc from 'picocolors';
 import { run } from './run.js';
-import { help } from '../utils/common_prints.js';
+import { help, commands } from '../utils/common_prints.js';
 import { config } from '../config.d/coach.js';
 import { activities, ALLOWED_ACTIONS } from './activities.js';
 
@@ -42,6 +42,10 @@ if (args.includes('--help') || args.includes('-h')) {
     if (debugmode) console.log(pc.yellow('Debug mode enabled'));
 
     switch(command) {
+         case 'commands':
+            // Print the available commands and their usage
+            commands();
+            break;
         case 'run':
             // Read the TCX file and analyze it with the AI API
             await run({
@@ -81,7 +85,7 @@ if (args.includes('--help') || args.includes('-h')) {
 }
 
 function isValidCommand(command: string) {
-    const validCommands = ['run', 'activities'];
+    const validCommands = ['run', 'activities', 'commands'];
     return validCommands.includes(command);
 }
 

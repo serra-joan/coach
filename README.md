@@ -61,6 +61,12 @@ coach run ruta/archivo.tcx --use-saved-data
 coach run ruta/archivo.tcx --no-use-saved-data
 ```
 
+Ver todos los comandos y su uso
+
+```bash
+coach commands
+```
+
 ## Flags disponibles
 
 ```text
