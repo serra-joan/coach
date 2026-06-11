@@ -39,14 +39,22 @@ export async function fetchToModel({ data, model = null, prompt, savedActivities
     }
 
     let body: OllamaApiBody = {
-        think: true,
+        think: config.THINK,
         stream: false,
         model,
-        system: systemText
+        messages: [
+            {
+                role: 'system',
+                content: systemText
+            }
+        ],
+        options: {
+            temperature: config.TEMPERATURE,
+        }
     };
 
     // insert user prompt
-    if (prompt && prompt.trim() !== '') body.prompt = prompt;
+    if (prompt && prompt.trim() !== '') body.messages.push({ role: 'user', content: prompt });
 
     const bodyJSON = JSON.stringify(body);
 
@@ -55,7 +63,7 @@ export async function fetchToModel({ data, model = null, prompt, savedActivities
     try {
         console.log(`Esperando respuesta del modelo ${model ?? 'desconocido'}...\n`);
 
-        const response = await fetch(`${URL_API}api/generate`, {
+        const response = await fetch(`${URL_API}api/chat`, {
             method: 'POST',
             headers: HEADERS_API,
             body: bodyJSON
@@ -67,24 +75,28 @@ export async function fetchToModel({ data, model = null, prompt, savedActivities
         }
 
         const result = await response.json();
-        const cleanedResponse = cleanText(result.response);
-        //console.log(result, `${URL_API}api/generate`, bodyJSON);
+        const cleanedResponse = cleanText(result);
         return { statusCode: 200, body: { msg: cleanedResponse, model } };
+        
     } catch (err) {
         return { statusCode: 500, body: err instanceof Error ? err.message : String(err) };
     }
 }
 
-function cleanText(text: string) {
+function cleanText(response: { message?: { content?: string } }): string {
+    // get the message
+    let message = response.message?.content || '';
+    if (message !== '') return message;
+
     // Remove <think> ... </think> if exists
-    text = text.replace(/<think>[\s\S]*?<\/think>/g, '');
+    message = message.replace(/<think>[\s\S]*?<\/think>/g, '');
 
     // Remove line breaks and extra spaces
-    text = text
+    message = message
         .split('\n')
         .map(line => line.startsWith('+') ? line.slice(1) : line)
         .join('')
         .trim();
 
-    return text;
+    return message;
 }

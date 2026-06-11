@@ -26,6 +26,11 @@ export interface OllamaApiBody {
   think: boolean;
   stream: boolean;
   model: string;
-  system: string;
-  prompt?: string;
+  messages: {
+      role: 'system' | 'user';
+      content: string;
+  }[];
+  options: {
+      temperature: number;
+  };
 }
