@@ -24,13 +24,13 @@ export async function fetchToModel({ data, model = null, prompt, savedActivities
     systemText = systemText.replace('{date}', data.date);
     systemText = systemText.replace('{time}', data.time);
     systemText = systemText.replace('{distance}', data.distance);
-    systemText = systemText.replace('{calories}', data.calories);
+    systemText = systemText.replace('{calories}', String(data.calories));
     systemText = systemText.replace('{activity}', data.activity);
-    systemText = systemText.replace('{intensities}', data.intensities.join(', '));
     systemText = systemText.replace('{maxHeartRate}', String(data.maxHeartRate));
     systemText = systemText.replace('{altitudPositive}', String(data.altitudePositive));
     systemText = systemText.replace('{altitudNegative}', String(data.altitudeNegative));
-    systemText = systemText.replace('{heartRateAverage}', data.heartRateAverage);
+    systemText = systemText.replace('{heartRateAverage}', String(data.heartRateAverage));
+    systemText = systemText.replace('{laps}', JSON.stringify(data.laps));
 
     // if there are saved activities, add the additionalData to the system prompt
     if (savedActivities && savedActivities.trim() !== '') {

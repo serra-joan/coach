@@ -20,6 +20,7 @@ export const modelConfig = {
             - Altitud negativa -> {altitudNegative} metros. 
             - Fecha y hora -> {date}. 
             - Tipo de actividad -> {activity}.
+            - Laps, las vueltas que se han hecho. Esto implica que si es una actividad de correr y hay más vueltas que kilómetros o las vueltas tienen más kilómetros que uno, ha sido un entrenamiento de series. Los parámetros de cada vuelta están en una lista en formato JSON.-> {laps}.
     `,
-    additionalData: `Además, estas son otras actividades que realizó el usuario: {savedActivities}. Ten en cuenta esta información para valorar el rendimiento del entreno actual. También ten en cuenta el día en que las realizó para tener una buena linea del timepo entre descansos y entrenos.`
+    additionalData: `Además, estas son otras actividades que realizó el usuario: {savedActivities}. Ten en cuenta esta información para valorar el rendimiento del entreno actual. También ten en cuenta el día en que las realizó para tener una buena linea del tiempo entre descansos y entrenos.`
 }
