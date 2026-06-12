@@ -39,7 +39,7 @@ export interface RawActivityData {
 }
 
 export interface OllamaApiBody {
-  think: boolean | 'high' | 'medium' | 'low';
+  think?: boolean | 'high' | 'medium' | 'low';
   stream: boolean;
   model: string;
   messages: {
