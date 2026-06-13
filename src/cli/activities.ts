@@ -22,7 +22,7 @@ async function show() {
     // get all files in activitiesDir that ends with .json
     let activities = await list()
     if (activities.length === 0) {
-        console.log('No activities found for the specified type.')
+        console.log('No activities found.')
         return
     }
 

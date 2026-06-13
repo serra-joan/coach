@@ -1,9 +1,10 @@
 import fs from 'node:fs'
 import ps from 'picocolors'
 import path from 'node:path'
+import os from 'node:os'
 import { CoachActivityData } from '../types.js'
 
-const DATA_DIR = path.resolve(process.cwd(), 'data', 'activities')
+const DATA_DIR = path.resolve(os.homedir(), '.coach', 'data', 'activities')
 
 // save the data if no is already exist on a .json from his type.
 export async function save(data: CoachActivityData, debugmode = false) {
@@ -50,7 +51,6 @@ export async function save(data: CoachActivityData, debugmode = false) {
 export async function list(debugmode = false): Promise<[] | string[]> {
     // get all activities from data/activities (only name files)
     if (!fs.existsSync(DATA_DIR)) {
-        console.log('No activities found.')
         return []
     }
 
