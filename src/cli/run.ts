@@ -4,7 +4,7 @@ import { getTCX } from '../utils/reader_tcx.js';
 import { fetchToModel } from '../api/model.js';
 import { config } from '../config.d/coach.js';
 import type { CoachActivityData } from '../types.js';
-import { save as saveData, list as listData } from '../utils/manage_saved_data.js';
+import { save as saveData } from '../utils/manage_saved_data.js';
 
 const SAVE_DATA: boolean = config.SAVE_DATA; // Save the data of the training in json files. Default true.
 const USE_SAVED_DATA: boolean = true; // Use the saved data of the same activity type to send to the model. Default true.
@@ -28,7 +28,7 @@ export async function run({ model, prompt, fileName, flags }
     printDataPritty(parsedData, debugmode);
 
     if (SAVE_DATA) {
-        saveData(parsedData, debugmode);
+        await saveData(parsedData, debugmode);
     }
 
     // API IA
@@ -41,8 +41,7 @@ export async function run({ model, prompt, fileName, flags }
     // if the saved data has to be used
     let savedActivities: string | null = null
     if ((USE_SAVED_DATA && useSavedData) || useSavedData) {
-        console.log(pc.yellow('Debug -> using saved data of the same activity type:'));
-        savedActivities = await listData(parsedData.activity, debugmode) as string;
+        console.log(pc.yellow('Debug -> using saved data of the same activity type'));
     }
     
     // Send parsedData to the AI API

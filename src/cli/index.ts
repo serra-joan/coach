@@ -65,7 +65,7 @@ if (args.includes('--help') || args.includes('-h')) {
                 process.exit(0);
             }
 
-            activities(action, args[2] || undefined); // the third argument is the type of the activity, like "running" or "cycling"
+            await activities(action, args[2] || undefined); // the third argument is the type of the activity, like "running" or "cycling"
             break;
 
         default:

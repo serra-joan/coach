@@ -47,19 +47,54 @@ export async function save(data: CoachActivityData, debugmode = false) {
 }
 
 // list the save data of the type
-export async function list(activityType: string, debugmode = false, parsed = false): Promise<CoachActivityData[] | string> {
-    const dir = path.resolve(process.cwd(), 'data', 'activities')
-    const filePath = path.join(dir, `${activityType.toLowerCase().replace(/\s+/g, '_')}.json`)
-
-    if (!fs.existsSync(filePath)) return []
+export async function list(debugmode = false): Promise<[] | string[]> {
+    // get all activities from data/activities (only name files)
+    const activitiesDir = path.join(process.cwd(), 'data', 'activities')
+    if (!fs.existsSync(activitiesDir)) {
+        console.log('No activities found.')
+        return []
+    }
 
     try {
-        if (parsed) return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as CoachActivityData[]
-        else return fs.readFileSync(filePath, 'utf-8') as string
+        return fs.readdirSync(activitiesDir).filter(file => file.endsWith('.json'))
         
     } catch (err) {
         if (!debugmode) console.log(ps.bgRed('ERROR READING SAVED DATA:'), "Run with --debug to see more details")
         else console.error(ps.bgRed('ERROR READING SAVED DATA:'), err)
         return []
+    }
+}
+
+export async function read(type: string, debugmode = false): Promise<string | null> {
+    const filePath = path.join(process.cwd(), 'data', 'activities', `${type}.json`)
+    if (!fs.existsSync(filePath)) {
+        return `Activity "${type}" not found.`
+    }
+
+    try {
+        return fs.readFileSync(filePath, 'utf-8') as string
+
+    } catch (err) {
+        if (!debugmode) console.log(ps.bgRed('ERROR READING FILE:'), "Run with --debug to see more details")
+        else console.error(ps.bgRed('ERROR READING FILE:'), err)
+        return null
+    }
+}
+
+export async function remove(type: string, debugmode = false): Promise<boolean> {
+    const filePath = path.join(process.cwd(), 'data', 'activities', `${type}.json`)
+    if (!fs.existsSync(filePath)) {
+        if (debugmode) console.log(ps.yellow(`Activity "${type}" not found.`))
+        return false
+    }
+
+    try {
+        fs.unlinkSync(filePath)
+        return true
+
+    } catch (err) {
+        if (!debugmode) console.log(ps.bgRed('ERROR REMOVING FILE:'), "Run with --debug to see more details")
+        else console.error(ps.bgRed('ERROR REMOVING FILE:'), err)
+        return false
     }
 }
