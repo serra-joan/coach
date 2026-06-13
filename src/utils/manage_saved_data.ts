@@ -3,14 +3,14 @@ import ps from 'picocolors'
 import path from 'node:path'
 import { CoachActivityData } from '../types.js'
 
+const DATA_DIR = path.resolve(process.cwd(), 'data', 'activities')
+
 // save the data if no is already exist on a .json from his type.
 export async function save(data: CoachActivityData, debugmode = false) {
-    const dir = path.resolve(process.cwd(), 'data', 'activities')
-    
     // Create the directory if it doesn't exist
-    if (!fs.existsSync(dir)) {
+    if (!fs.existsSync(DATA_DIR)) {
         try {
-            fs.mkdirSync(dir, { recursive: true })
+            fs.mkdirSync(DATA_DIR, { recursive: true })
 
         } catch (err) {
             if (!debugmode) console.log(ps.bgRed('ERROR CREATING DIRECTORY:'), "Run with --debug to see more details")
@@ -22,7 +22,7 @@ export async function save(data: CoachActivityData, debugmode = false) {
     // get the activity type
     const activityType = data.activity.toLowerCase().replace(/\s+/g, '_')
 
-    const filePath = path.join(dir, `${activityType}.json`);
+    const filePath = path.join(DATA_DIR, `${activityType}.json`);
     try {
         // get existing data if exist
         const existing = fs.existsSync(filePath)
@@ -49,14 +49,13 @@ export async function save(data: CoachActivityData, debugmode = false) {
 // list the save data of the type
 export async function list(debugmode = false): Promise<[] | string[]> {
     // get all activities from data/activities (only name files)
-    const activitiesDir = path.join(process.cwd(), 'data', 'activities')
-    if (!fs.existsSync(activitiesDir)) {
+    if (!fs.existsSync(DATA_DIR)) {
         console.log('No activities found.')
         return []
     }
 
     try {
-        return fs.readdirSync(activitiesDir).filter(file => file.endsWith('.json'))
+        return fs.readdirSync(DATA_DIR).filter(file => file.endsWith('.json'))
         
     } catch (err) {
         if (!debugmode) console.log(ps.bgRed('ERROR READING SAVED DATA:'), "Run with --debug to see more details")
@@ -66,7 +65,7 @@ export async function list(debugmode = false): Promise<[] | string[]> {
 }
 
 export async function read(type: string, debugmode = false): Promise<string | null> {
-    const filePath = path.join(process.cwd(), 'data', 'activities', `${type}.json`)
+    const filePath = path.join(DATA_DIR, `${type}.json`)
     if (!fs.existsSync(filePath)) {
         return `Activity "${type}" not found.`
     }
@@ -82,7 +81,7 @@ export async function read(type: string, debugmode = false): Promise<string | nu
 }
 
 export async function remove(type: string, debugmode = false): Promise<boolean> {
-    const filePath = path.join(process.cwd(), 'data', 'activities', `${type}.json`)
+    const filePath = path.join(DATA_DIR, `${type}.json`)
     if (!fs.existsSync(filePath)) {
         if (debugmode) console.log(ps.yellow(`Activity "${type}" not found.`))
         return false
