@@ -18,7 +18,7 @@ export async function run({ model, prompt, fileName, flags }
         return;
     }
 
-    const parsedData = await getTCX({ model, fileName });
+    const parsedData = await getTCX(fileName);
 
     if (!parsedData) {
         console.log(pc.bgRed('No data!:'), 'No hay data a analizar');
@@ -65,18 +65,20 @@ function printDataPritty(data: CoachActivityData, debugmode: boolean) {
     console.log(pc.blue('Fecha:'), data.date);
     console.log(pc.blue('Tiempo total:'), `${data.time} minutos`);
     console.log(pc.blue('Distancia total:'), `${data.distance} km`);
-    console.log(pc.blue('Calorías totales:'), `${data.calories} kcal`);
+    console.log(pc.blue('Ritmo promedio:'), `${data.paceAverage} /km`);
     console.log(pc.blue('Frecuencia cardíaca media:'), `${data.heartRateAverage} bpm`);
     console.log(pc.blue('Frecuencia cardíaca máxima:'), `${data.maxHeartRate} bpm`);
     console.log(pc.blue('Desnivel:'), `↑${data.altitudePositive} m / ↓${data.altitudeNegative} m`);
+    console.log(pc.blue('Calorías totales:'), `${data.calories} kcal`);
 
     // laps data on table format
     console.log(pc.blue('Laps:'));
 
-    const header = ['Vuelta', 'Distancia (km)', 'BPM media', 'BPM máxima', 'Desnivel (m)'];
+    const header = ['Vuelta', 'Distancia (km)', 'Ritmo (min/km)', 'BPM media', 'BPM máxima', 'Desnivel (m)'];
     const rows = data.laps.map((lap, index) => [
         String(index + 1),
         `${lap.distance}`,
+        `${lap.pace}`,
         `${lap.heartRateAverage}`,
         `${lap.maxHeartRate}`,
         `↑${lap.altitudePositive} / ↓${lap.altitudeNegative}`,

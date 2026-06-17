@@ -4,12 +4,14 @@ export interface CoachActivityData {
   time: string;
   distance: string;
   calories: number;
+  paceAverage: string;
   heartRateAverage: number;
   maxHeartRate: number;
   altitudePositive: number;
   altitudeNegative: number;
   laps: {
     time: string;
+    pace: string;
     distance: string;
     intensities: string;
     heartRateAverage: number;
@@ -23,12 +25,14 @@ export interface RawActivityData {
   time: number;
   distance: number;
   calories: number;
+  paceAverage: string;
   heartRateAverage: number;
   maxHeartRate: number;
   altitudePositive: number;
   altitudeNegative: number;
   laps: {
     time: number;
+    pace: string;
     distance: number;
     intensities: string;
     heartRateAverage: number;

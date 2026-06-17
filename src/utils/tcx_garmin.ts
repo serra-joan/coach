@@ -47,6 +47,7 @@ function processLaps(laps: any[]): RawActivityData {
         time: 0,
         distance: 0,
         calories: 0,
+        paceAverage: '0:00',
         heartRateAverage: 0,
         maxHeartRate: 0,
         altitudePositive: 0,
@@ -86,6 +87,12 @@ function processLaps(laps: any[]): RawActivityData {
         baseData.distance += parseFloat(distance)
         baseData.calories += parseFloat(calories)
 
+        // pace -> minutes/km min:seconds/km
+        const pacePerLap = parseFloat(time) / (parseFloat(distance) / 1000)
+        const paceMinutes = Math.floor(pacePerLap / 60)
+        const paceSeconds = Math.round(pacePerLap % 60)
+        const paceFormatted = `${paceMinutes}:${paceSeconds < 10 ? '0' : ''}${paceSeconds}`
+
         // set lap data
         const { positive, negative } = altitudeCalcul(altitudLap)
         baseData.laps.push({
@@ -95,6 +102,7 @@ function processLaps(laps: any[]): RawActivityData {
             altitudeNegative: negative,
             distance: parseFloat(distance),
             maxHeartRate: parseFloat(maxHeartRate),
+            pace: paceFormatted,
             heartRateAverage: parseFloat(heartRateAverage),
         })
     })
@@ -108,6 +116,12 @@ function processLaps(laps: any[]): RawActivityData {
     const { positive, negative } = altitudeCalcul(altitudesArray)
     baseData.altitudePositive = positive
     baseData.altitudeNegative = negative
+
+    // calculate pace average, minutes/km
+    const paceAverage = baseData.time / (baseData.distance / 1000)
+    const paceMinutes = Math.floor(paceAverage / 60)
+    const paceSeconds = Math.round(paceAverage % 60)
+    baseData.paceAverage = `${paceMinutes}:${paceSeconds < 10 ? '0' : ''}${paceSeconds}`
 
     return baseData
 }
@@ -152,6 +166,7 @@ function convertUnits(data: RawActivityData & { date: string; activity: string }
     let parseData = {
         date: new Date(data.date).toLocaleString('es-ES', { timeZone: 'Europe/Madrid' }),
         activity: data.activity,
+        paceAverage: data.paceAverage,
         time: (data.time / 60).toFixed(2),
         distance: (data.distance / 1000).toFixed(2),
         calories: Math.round(data.calories),
@@ -162,6 +177,7 @@ function convertUnits(data: RawActivityData & { date: string; activity: string }
         laps: data.laps.map(lap => ({
             time: (lap.time / 60).toFixed(2),
             distance: (lap.distance / 1000).toFixed(2),
+            pace: lap.pace,
             intensities: lap.intensities,
             heartRateAverage: Math.round(lap.heartRateAverage),
             maxHeartRate: lap.maxHeartRate,
