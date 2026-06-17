@@ -27,6 +27,7 @@ export async function fetchToModel({ data, model = null, prompt, savedActivities
     systemText = systemText.replace('{calories}', String(data.calories));
     systemText = systemText.replace('{activity}', data.activity);
     systemText = systemText.replace('{maxHeartRate}', String(data.maxHeartRate));
+    systemText = systemText.replace('{paceAverage}', String(data.maxHeartRate));
     systemText = systemText.replace('{altitudPositive}', String(data.altitudePositive));
     systemText = systemText.replace('{altitudNegative}', String(data.altitudeNegative));
     systemText = systemText.replace('{heartRateAverage}', String(data.heartRateAverage));

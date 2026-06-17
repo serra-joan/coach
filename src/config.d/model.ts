@@ -16,6 +16,7 @@ export const modelConfig = {
             - Intensidad por cada vuelta, te lo doy separado por comas, si es 'active' es que he estado activo, en cambio si es 'resting' he descansado -> {intensities}. 
             - Frecuencia cardíaca media -> {heartRateAverage}. 
             - Frecuencia cardíaca máxima -> {maxHeartRate}. 
+            - Ritmo promedio -> {paceAverage}.
             - Altitud positiva -> {altitudPositive} metros. 
             - Altitud negativa -> {altitudNegative} metros. 
             - Fecha y hora -> {date}. 
