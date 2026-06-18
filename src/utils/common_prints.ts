@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import pc from 'picocolors';
 import { fileURLToPath } from 'url';
+import { CoachActivityData } from '../types.js';
 
 export function help() {
     console.log(`
@@ -56,4 +58,48 @@ export function version() {
   const packageInfo = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')) as { version: string };
 
   console.log(`coach versión ${packageInfo.version || 'unknown'}`);
+}
+
+export function printDataPritty(data: CoachActivityData, debugmode: boolean) {
+    // basic data
+    console.log(pc.blue('Actividad:'), data.activity);
+    console.log(pc.blue('Fecha:'), data.date);
+    console.log(pc.blue('Tiempo total:'), `${data.time} minutos`);
+    console.log(pc.blue('Distancia total:'), `${data.distance} km`);
+    console.log(pc.blue('Ritmo promedio:'), `${data.paceAverage} /km`);
+    console.log(pc.blue('Frecuencia cardíaca media:'), `${data.heartRateAverage} bpm`);
+    console.log(pc.blue('Frecuencia cardíaca máxima:'), `${data.maxHeartRate} bpm`);
+    console.log(pc.blue('Desnivel:'), `↑${data.altitudePositive} m / ↓${data.altitudeNegative} m`);
+    console.log(pc.blue('Calorías totales:'), `${data.calories} kcal`);
+
+    // laps data on table format
+    console.log(pc.blue('Laps:'));
+
+    const header = ['Vuelta', 'Distancia (km)', 'Ritmo (min/km)', 'BPM media', 'BPM máxima', 'Desnivel (m)'];
+    const rows = data.laps.map((lap, index) => [
+        String(index + 1),
+        `${lap.distance}`,
+        `${lap.pace}`,
+        `${lap.heartRateAverage}`,
+        `${lap.maxHeartRate}`,
+        `↑${lap.altitudePositive} / ↓${lap.altitudeNegative}`,
+    ]);
+
+    const widths = header.map((title, columnIndex) => Math.max(
+        title.length,
+        ...rows.map((row) => String(row[columnIndex]).length),
+    ));
+
+    const formatRow = (values: string[]) => values
+        .map((value, index) => String(value).padEnd(widths[index], ' '))
+        .join(' | ');
+
+    console.log(pc.white(formatRow(header)));
+    console.log(pc.white('-'.repeat(widths.reduce((total, width) => total + width + 3, 0) - 1)));
+    rows.forEach((row) => console.log(pc.white(formatRow(row))));
+    console.log('\n\n'); // space please
+
+    if (debugmode) {
+        console.log(pc.yellow('Debug -> print json:'), JSON.stringify(data, null, 2));
+    }
 }

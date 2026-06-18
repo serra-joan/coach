@@ -1,6 +1,8 @@
 // File to manage 'activities' command
 import pc from 'picocolors'
 import path from 'node:path'
+import { CoachActivityData } from '../types.js'
+import { printDataPritty } from '../utils/common_prints.js'
 import { read, remove, list } from '../utils/manage_saved_data.js'
 
 export const ALLOWED_ACTIONS = ['list', 'open', 'remove'] as const
@@ -41,8 +43,34 @@ async function open(type: string | undefined) {
         process.exit(0)
     }
 
+    // get JSON data
     const data = await read(type)
-    console.log(data || 'unknown error')
+    const dataJSON = data ? JSON.parse(data) : null
+
+    // order the data by date
+    if (dataJSON) {
+        dataJSON.sort((a: CoachActivityData, b: CoachActivityData) => {
+            const dateA = parseActivityDate(a.date)
+            const dateB = parseActivityDate(b.date)
+            return dateA.getTime() - dateB.getTime()
+        })
+    }
+
+    // print
+    if (dataJSON) {
+        dataJSON.forEach((activity: CoachActivityData, index: number) => {
+            printDataPritty(activity, false)
+        })
+    }
+    else console.log('unknown error')
+}
+
+// parse date to order by date
+function parseActivityDate(dateString: string): Date {
+    const [datePart, timePart] = dateString.split(',').map(part => part.trim())
+    const [day, month, year] = datePart.split('/').map(Number)
+    const [hours, minutes, seconds] = timePart.split(':').map(Number)
+    return new Date(year, month - 1, day, hours, minutes, seconds)
 }
 
 // remove the file
